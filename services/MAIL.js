@@ -3,7 +3,7 @@ const { MAIL_SETTINGS } = require('../constants/constants');
 const transporter = nodemailer.createTransport(MAIL_SETTINGS);
 
 module.exports.sendMail = async (email, OTP) => {
- // console.log(email, OTP, "67257316")
+ 
 
   try {
     
@@ -25,11 +25,12 @@ module.exports.sendMail = async (email, OTP) => {
 
     let info = await transporter.sendMail(mailOptions)
           .then(() => {
-            console.log('Message sent')
+         console.log('Message sent')
         })
-
+      
     return info;
-  } catch (error) {
+    
+       } catch (error) {
     console.log(error);
     return false;
   }
