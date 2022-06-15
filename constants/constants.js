@@ -10,8 +10,8 @@ module.exports = {
     specialChars: false,
   },
   MAIL_SETTINGS: {
-   // host: 'smtp.gmail.com',
-   // port: 587,
+   host: 'smtp.gmail.com',
+    port: 587,
     service: 'gmail',
     auth: {
      user: "gauravpatil551632@gmail.com",

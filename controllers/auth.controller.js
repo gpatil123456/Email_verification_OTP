@@ -2,8 +2,13 @@ const { encrypt, compare } = require('../services/crypto');
 const { generateOTP } = require('../services/OTP');
 const { sendMail } = require('../services/MAIL');
 const User = require('../models/User');
+const bcrypt = require('bcrypt');
+const generateJwt=require('../services/JWT')
+const generateQRcode=require('../controllers/2faGoogle')
+const qrcode = require('qrcode')
+const speakeasy = require('speakeasy')
 
-module.exports.signUpUser = async (req, res) => {
+exports.signUpUser = async (req, res) => {
   const { email, password } = req.body;
   const isExisting = await findUserByEmail(email);
   if (isExisting) {
@@ -18,8 +23,39 @@ module.exports.signUpUser = async (req, res) => {
   }
   res.send(newUser);
 };
+exports.login = async (req, res) => {
+  const { email, password } = req.body;
 
-module.exports.verifyEmail = async (req, res) => {
+  const user = await User.findOne({ email: email })
+  const isValid = await bcrypt.compare(password, user.password);
+  console.log(isValid);
+
+  if (!isValid ) {
+    return res.status(400).json({
+      statuscode: 400,
+      status: 'Failed',
+      message: "Invalid Credentials ",
+      data: {}
+    });
+
+  }
+  
+ const token= await generateJwt.signToken(email);
+  return res.status(200).json({
+    statuscode: 200,
+
+    status: 'Ok',
+    message: "Login Successfully",
+    data: {
+      Token:token
+    }
+
+  
+})
+}
+
+
+exports.verifyEmail = async (req, res) => {
   const { email, otp } = req.body;
   const user = await validateUserSignUp(email, otp);
   res.send(user);

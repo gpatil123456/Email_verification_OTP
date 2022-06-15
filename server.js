@@ -6,9 +6,9 @@ const qrcode = require('qrcode')
 const app =  express();
 
 app.use(express.json())
-app.use('/', require('./routes/router'))
+app.use('/', require('./routes/router'))+
 
-app.listen(9070, () => {
+app.listen(3000, () => {
     console.log('server runnning on port 3000')
 })
 
@@ -18,17 +18,8 @@ mongoose.connect(process.env.MONGODB_URL_LOCAL, {
 .then(() => console.log("MongoDB connected!"))
 .catch((err) => console.log("Connection Failed"))
 
-var secret = speakeasy.generateSecret({
-    name: "Gauravs_Authentication"
-})
 
-console.log(secret)
 
-qrcode.toDataURL(secret.otpauth_url, (err, data) => {
-    console.log(data)
-})
-
-// console.log("gaurav");
 
 
 
